@@ -17,17 +17,16 @@ class PreferencesWindow:
             self.builder.add_from_file(UI_FILE)
         except:
             print "Can't load UI"
-            raise
 
         self.window = self.builder.get_object("PreferencesWindow")
 
         self.config = self.load_config()
 
-        self.beginHours   = self.hour_button("spnBeginHours", 'at')
-        self.beginMinutes = self.minute_button("spnBeginMinutes", 'at')
+        self.beginHours   = self.hour_button("spnBeginHours", 'begin')
+        self.beginMinutes = self.minute_button("spnBeginMinutes", 'begin')
 
-        self.endHours   = self.hour_button("spnEndHours", 'until')
-        self.endMinutes = self.minute_button("spnEndMinutes", 'until')
+        self.endHours   = self.hour_button("spnEndHours", 'end')
+        self.endMinutes = self.minute_button("spnEndMinutes", 'end')
 
         self.cancelButton = self.builder.get_object("btnCancel")
         self.cancelButton.connect("clicked", self.__cancel)
