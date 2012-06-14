@@ -66,7 +66,7 @@ class PreferencesWindow:
 
     def save_config(self, config):
         print config
-        for k in ['at', 'until']:
+        for k in ['begin', 'end']:
             if config[k]:
                 self.config[k] = config[k]
 
@@ -87,10 +87,10 @@ class PreferencesWindow:
 
     def __ok(self, w):
         self.save_config({
-            'at' : [
+            'begin' : [
                 int(self.beginHours.get_value()),
                 int(self.beginMinutes.get_value()) ],
-            'until' : [
+            'end' : [
                 int(self.endHours.get_value()),
                 int(self.endMinutes.get_value()) ] })
 
