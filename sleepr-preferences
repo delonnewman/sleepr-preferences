@@ -7,56 +7,56 @@ import yaml, sys, os
 import os.path as p
 
 CONFIG_FILE = '/etc/sleepr'
+UI_FILE     = p.realpath(p.join(p.dirname(sys.argv[0]), 'preferences-window.glade'))
 
 class PreferencesWindow:
     def __init__(self):
-        builder = Gtk.Builder.new()
+        self.builder = Gtk.Builder.new()
 
-        ui = p.realpath(p.join(p.dirname(sys.argv[0]), '..', 'lib', 'preferences-window.glade'))
-        
         try:
-            builder.add_from_file(ui)
+            self.builder.add_from_file(UI_FILE)
         except:
             print "Can't load UI"
             raise
 
-        self.__w = builder.get_object("PreferencesWindow")
+        self.window = self.builder.get_object("PreferencesWindow")
 
         self.config = self.load_config()
 
-        self.beginHours = builder.get_object("spnBeginHours")
-        self.beginHours.set_range(0, 23)
-        self.beginHours.set_increments(1, -1)
-        self.beginHours.set_wrap(True)
-        self.beginHours.set_value(self.config['at'][0])
+        self.beginHours   = self.hour_button("spnBeginHours", 'at')
+        self.beginMinutes = self.minute_button("spnBeginMinutes", 'at')
 
-        self.beginMinutes = builder.get_object("spnBeginMinutes")
-        self.beginMinutes.set_range(0, 59)
-        self.beginMinutes.set_increments(1, -1)
-        self.beginHours.set_wrap(True)
-        self.beginMinutes.set_value(self.config['at'][1])
+        self.endHours   = self.hour_button("spnEndHours", 'until')
+        self.endMinutes = self.minute_button("spnEndMinutes", 'until')
 
-        self.endHours = builder.get_object("spnEndHours")
-        self.endHours.set_range(0, 23)
-        self.endHours.set_increments(1, -1)
-        self.beginHours.set_wrap(True)
-        self.endHours.set_value(self.config['until'][0])
-
-        self.endMinutes = builder.get_object("spnEndMinutes")
-        self.endMinutes.set_range(0, 59)
-        self.endMinutes.set_increments(1, -1)
-        self.beginHours.set_wrap(True)
-        self.endMinutes.set_value(self.config['until'][1])
-
-        self.cancelButton = builder.get_object("btnCancel")
+        self.cancelButton = self.builder.get_object("btnCancel")
         self.cancelButton.connect("clicked", self.__cancel)
 
-        self.okButton = builder.get_object("btnOK")
+        self.okButton = self.builder.get_object("btnOK")
         self.okButton.connect("clicked", self.__ok)
 
 
+    def build_button(self, name):
+        btn = self.builder.get_object(name) 
+        btn.set_increments(1, -1)
+        btn.set_wrap(True)
+        return btn
+
+    def minute_button(self, name, when):
+        btn = self.build_button(name)
+        btn.set_range(0, 59)
+        btn.set_value(self.config[when][1])
+        return btn
+        
+    def hour_button(self, name, when):
+        btn = self.build_button(name)
+        btn.set_range(0, 23)
+        btn.set_value(self.config[when][0])
+        return btn
+
+
     def show(self):
-        self.__w.show()
+        self.window.show()
 
     def load_config(self):
         try:
@@ -66,6 +66,7 @@ class PreferencesWindow:
             print "Can't read file '%s'" % CONFIG_FILE 
 
     def save_config(self, config):
+        print config
         for k in ['at', 'until']:
             if config[k]:
                 self.config[k] = config[k]
@@ -92,7 +93,7 @@ class PreferencesWindow:
                 int(self.beginMinutes.get_value()) ],
             'until' : [
                 int(self.endHours.get_value()),
-                int(self.endHours.get_value()) ] })
+                int(self.endMinutes.get_value()) ] })
 
         self.quit()
 
