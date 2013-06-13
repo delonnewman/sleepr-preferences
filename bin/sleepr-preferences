@@ -7,7 +7,7 @@ import yaml, sys, os
 import os.path as p
 
 CONFIG_FILE = '/etc/sleepr'
-UI_FILE     = p.realpath(p.join(p.dirname(sys.argv[0]), 'preferences-window.glade'))
+UI_FILE     = p.realpath(p.join(p.dirname(sys.argv[0]), '..', 'share', 'sleepr', 'preferences-window.glade'))
 
 class PreferencesWindow:
     def __init__(self):

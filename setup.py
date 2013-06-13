@@ -8,5 +8,6 @@ setup(name='Sleepr Preferences',
       author='Delon Newman',
       author_email='delon.newman@gmail.com',
       url='https://github.com/delonnewman/sleepr-preferences',
-      packages=['sleepr-preferences'],
+      scripts=['bin/sleepr-preferences'],
+      data_files=[('share/sleepr', ['share/sleepr/preferences-window.glade'])], 
      )
