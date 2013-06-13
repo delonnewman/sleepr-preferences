@@ -7,7 +7,8 @@ import yaml, sys, os
 import os.path as p
 
 CONFIG_FILE = '/etc/sleepr'
-UI_FILE     = p.realpath(p.join(p.dirname(sys.argv[0]), '..', 'share', 'sleepr', 'preferences-window.glade'))
+SHARE_DIR   = p.realpath(p.join(p.dirname(sys.argv[0]), '..', 'share', 'sleepr'))
+UI_FILE     = p.join(SHARE_DIR, 'preferences-window.glade')
 
 class PreferencesWindow:
     def __init__(self):
@@ -77,8 +78,7 @@ class PreferencesWindow:
             print "Can't write to file '%s'" % CONFIG_FILE
 
     def quit(self):
-        Gtk.main_quit()
-        sys.exit(0)
+        self.window.hide()
 
     # callbacks
 
@@ -96,6 +96,32 @@ class PreferencesWindow:
 
         self.quit()
 
-if __name__ == "__main__":
+def show_preferences(w):
     PreferencesWindow().show() 
+
+def quit_indicator(w):
+    Gtk.main_quit()
+    sys.exit(0)
+
+
+if __name__ == "__main__":
+    ind = ai.Indicator.new("sleeper-preferences", "sleepr-indicator-icon", ai.IndicatorCategory.OTHER)
+
+    ind.set_status(ai.IndicatorStatus.ACTIVE)
+    ind.set_icon_theme_path(SHARE_DIR)
+
+    menu = Gtk.Menu()
+    pref = Gtk.MenuItem("Preferences...")
+    pref.connect("activate", show_preferences)
+
+    quit = Gtk.MenuItem("Quit")
+    quit.connect("activate", quit_indicator)
+
+    menu.append(pref)
+    menu.append(quit)
+
+    pref.show()
+    quit.show()
+    ind.set_menu(menu)
+
     Gtk.main()

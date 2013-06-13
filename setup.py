@@ -9,5 +9,6 @@ setup(name='Sleepr Preferences',
       author_email='delon.newman@gmail.com',
       url='https://github.com/delonnewman/sleepr-preferences',
       scripts=['bin/sleepr-preferences'],
-      data_files=[('share/sleepr', ['share/sleepr/preferences-window.glade'])], 
+      data_files=[('share/sleepr', ['share/sleepr/preferences-window.glade',
+                                    'share/sleepr/sleepr-indicator-icon.png'])], 
      )
